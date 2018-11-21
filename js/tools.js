@@ -42,9 +42,8 @@ function myTools() {
                 });
                 break;
             case 'banner':
-                console.log('\n' + ' %c BNDong CNBlogs %c https://www.cnblogs.com/bndong ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
-                console.log('\n' + ' %c BNDong GitHub %c https://github.com/BNDong ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
-                console.log('\n' + ' %c BNDong Email %c dbuo@foxmail.com ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
+                console.log('\n' + ' %c Dark-Existed CNBlogs %c https://www.cnblogs.com/darkexisted/ ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
+                console.log('\n' + ' %c Dark-Existed GitHub %c https://github.com/Dark-Existed ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
                 break;
 
             default:
