@@ -103,11 +103,11 @@
         blogStartDate : "2017-01-06", // 入园时间，年-月-日，入园时间查看方法：鼠标停留园龄时间上，会显示入园时间
 
         // ---- 网站配置 ----
-        webpageTitleOnblur        : "(◍´꒳`◍) 哦嚯! 崩溃了", // 当前页失去焦点，页面title显示文字
-        webpageTitleOnblurTimeOut : 500, // 当前页失去焦点，页面title变化，延时时间，单位毫秒
-        webpageTitleFocus         : "(*´∇｀*) 欢迎回来！", // 当前页获取焦点，页面title显示文字，显示后延时恢复原title
+        webpageTitleOnblur        : "(ﾟДﾟ#) 哦嚯! 崩溃了", // 当前页失去焦点，页面title显示文字
+        webpageTitleOnblurTimeOut : 200, // 当前页失去焦点，页面title变化，延时时间，单位毫秒
+        webpageTitleFocus         : "(*´∇｀*) 欢迎回来 又好了！", // 当前页获取焦点，页面title显示文字，显示后延时恢复原title
         webpageTitleFocusTimeOut  : 1000, // 当前页获取焦点，页面title变化，延时时间，单位毫秒
-        webpageIcon : "https://files.cnblogs.com/files/bndong/blog_logo.gif", // 网站图标
+        webpageIcon : "https://files-cdn.cnblogs.com/files/darkexisted/robot.gif", // 网站图标
 
         // ---- 进度条配置 ----
         progressBar: {
@@ -120,22 +120,22 @@
         // ---- Loading配置 ----
         loading: {
             rebound: {
-                tension: 16,
-                friction: 5
+                tension: 14,
+                friction: 10
             },
             spinner: {
                 id: 'spinner',
                 radius: 90,
-                sides: 3,
-                depth: 4,
+                sides: 5,
+                depth: 8,
                 colors: {
                     background: '#f0f0f0',
-                    stroke: '#272633',
+                    stroke: null,
                     base: null,
                     child: '#272633'
                 },
                 alwaysForward: true, // When false the spring will reverse normally.
-                restAt: 0.5,         // A number from 0.1 to 0.9 || null for full rotation
+                restAt: null,         // A number from 0.1 to 0.9 || null for full rotation
                 renderBase: false
             }
         },
@@ -189,7 +189,7 @@
 
         // ---- 随笔页配置 ----
         essayTopImg: "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-569548.png", // 随笔页图片Url
-        essayCodeHighlighting: 'cnblogs', // 代码高亮主题：cnblogs || prettify || desert || sunburst || obsidian || doxy
+        essayCodeHighlighting: 'desert', // 代码高亮主题：cnblogs || prettify || desert || sunburst || obsidian || doxy
         essaySuffix:{ // 随笔后缀处配置
             aboutHtml    : '', // 关于博主，不配置使用默认
             copyrightHtml: '', // 版权声明，不配置使用默认
