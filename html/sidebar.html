@@ -185,11 +185,12 @@
 
         // ---- 主页配置 ----
         homeTopImg    : "https://raw.githubusercontent.com/BNDong/Cnblogs-Theme-SimpleMemory/master/img/home_top_bg.jpg", // 主页图片Url，推荐尺寸>= 1920*1080
-        homeBannerText: "", // 主页头图上的标语，设置此选项会固定显示文字，默认为空，每日自动获取一句。
+        homeBannerText: "", // 主页头图上的标语，设置此选项会固定显示文字，默认为空，自动获取一句。
 
         // ---- 随笔页配置 ----
         essayTopImg: "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-569548.png", // 随笔页图片Url
-        essayCodeHighlighting: 'desert', // 代码高亮主题：cnblogs || prettify || desert || sunburst || obsidian || doxy
+        essayCodeHighlightingType: 'prettify', // 代码主题插件类型：cnblogs || highlightjs || prettify
+        essayCodeHighlighting: 'desert', // 代码高亮主题，具体主题参考文档
         essaySuffix:{ // 随笔后缀处配置
             aboutHtml    : '', // 关于博主，不配置使用默认
             copyrightHtml: '', // 版权声明，不配置使用默认
@@ -209,6 +210,13 @@
             left : "活在当下", // 图标左侧文字
             right: "坦然而琐碎"  // 图标右侧文字
         },
+
+        // ---- 控制台输出 ----
+        consoleList: [
+            ['BNDong CNBlogs', 'https://www.cnblogs.com/darkexisted/'],
+            ['BNDong GitHub', 'https://github.com/Dark-Existed'],
+            // ['BNDong Email', 'dbuo@foxmail.com']
+        ],
         themeAuthor: true // 是否显示主题作者（原谅我的臭屁，O(∩_∩)O哈哈~）
     };
 
@@ -223,21 +231,21 @@
         pageLoading.initSpinner();
         pageLoading.spinner.init(pageLoading.spring, true);
 
-        $.getScript(getJsDelivrUrl('require.min.js'), function () {
-            $.getScript(getJsDelivrUrl('config.js'), function () {
-
-                var staticResource = [
-                    'optiscroll', 'ToProgress', 'rotate',
-                    'snapSvg', 'classie', 'main4', 'tools'];
-                require(staticResource, function() {
-                    require(['base'], function() {
-                        (new Base).init();
+        $.getScript(getJsDelivrUrl('jquery.mCustomScrollbar.min.js'), function () {
+            $.getScript(getJsDelivrUrl('require.min.js'), function () {
+                $.getScript(getJsDelivrUrl('config.js'), function () {
+                    var staticResource = [
+                        'optiscroll', 'ToProgress', 'rotate',
+                        'snapSvg', 'classie', 'main4', 'tools'];
+                    require(staticResource, function() {
+                        require(['base'], function() {
+                            (new Base).init();
+                        });
                     });
                 });
             });
         });
     });
-
 
     // get file url
     function getJsDelivrUrl(file, directory) {

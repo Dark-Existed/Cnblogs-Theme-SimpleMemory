@@ -33,7 +33,9 @@ a.ready(function () {
     o.each(function (t) {
         var u = $(this),
             v = u[0];
-
+        
+        if ($.inArray((v.tagName.toLowerCase()), ["h1", "h2"]) == -1) return true;
+        
         var title=u.text();
         var text=u.text();
 

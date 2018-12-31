@@ -91,7 +91,7 @@ function Base() {
         bndongJs.setPageAnimationControl();
 
         // 控制台输出
-        tools.consoleText([], 'banner');
+        tools.consoleText(window.cnblogsConfig.consoleList, 'banner');
 
         (function () {
             var re = /x/
@@ -180,6 +180,7 @@ function Base() {
 
         bndongJs.setHitokoto();
         bndongJs.scrollMonitor();
+        bndongJs.setDomHomePosition();
 
         if (window.cnblogsConfig.homeTopAnimationRendered)
             require(['circleMagic'], function() {
@@ -198,6 +199,7 @@ function Base() {
         $('.inner').css('max-width', '100vw');
 
         bndongJs.setDomHomePosition();
+        bndongJs.setCodeHighlighting();
 
         require(['baguetteBox', 'marvin', 'articleStatement'], function(baguetteBox) {
 
@@ -226,7 +228,6 @@ function Base() {
         timeIds.setNotHomeRightMenuTId = window.setInterval( bndongJs.addNotHomeRightMenu, 1000 );
 
         bndongJs.setNotHomeTopImg();
-        bndongJs.setCodeHighlighting();
         bndongJs.setCommentStyle();
     };
 
@@ -276,25 +277,46 @@ function Base() {
             '有的人25岁就死了，只是到75岁才埋葬'
         ];
 
+        // ===================  ONE . 每日一句  =================================
+        // var settings = {
+        //     "async": true,
+        //     "crossDomain": true,
+        //     "url": "https://api.hibai.cn/api/index/index",
+        //     "method": "POST",
+        //     "headers": {
+        //         "content-type": "application/x-www-form-urlencoded",
+        //     },
+        //     "data": {
+        //         "TransCode": "030111",
+        //         "OpenId": "123456789",
+        //         "Body": ""
+        //     }
+        // };
+        //
+        // $.ajax(settings).done(function (response) {
+        //     if (response.ResultCode == 1) {
+        //         $('#hitokoto').text(response.Body.word).css('display', '-webkit-box');
+        //         $('#hitokotoAuthor').text('- '+response.Body.word_from).show();
+        //     } else {
+        //         var listIndex = tools.randomNum(0, topTitleList.length - 1);
+        //         $('#hitokoto').text(topTitleList[listIndex]).css('display', '-webkit-box');
+        //     }
+        //     bndongJs.setDomHomePosition();
+        //     return false;
+        // });
+
+        // ===================  今日诗词  =================================
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "https://api.hibai.cn/api/index/index",
-            "method": "POST",
-            "headers": {
-                "content-type": "application/x-www-form-urlencoded",
-            },
-            "data": {
-                "TransCode": "030111",
-                "OpenId": "123456789",
-                "Body": ""
-            }
+            "url": "https://v2.jinrishici.com/one.json",
+            "method": "GET"
         };
 
         $.ajax(settings).done(function (response) {
-            if (response.ResultCode == 1) {
-                $('#hitokoto').text(response.Body.word).css('display', '-webkit-box');
-                $('#hitokotoAuthor').text('- '+response.Body.word_from).show();
+            if (response && response.status == "success") {
+                $('#hitokoto').text(response.data.content).css('display', '-webkit-box');
+                $('#hitokotoAuthor').text('《'+response.data.origin.title+'》 - '+response.data.origin.dynasty+' - '+response.data.origin.author).show();
             } else {
                 var listIndex = tools.randomNum(0, topTitleList.length - 1);
                 $('#hitokoto').text(topTitleList[listIndex]).css('display', '-webkit-box');
@@ -365,71 +387,100 @@ function Base() {
      * 设置代码高亮
      */
     this.setCodeHighlighting = function () {
-        switch (window.cnblogsConfig.essayCodeHighlighting) {
-            case 'prettify':
-                before();
-                require(['codePrettify'], function() {
-                    after();
-                    $('.cnblogs_code pre').css('background-color', '#f9f9f9');
-                    $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #999;"></i>');
-                });break;
-            case 'desert':
-                before();
-                require(['codeDesert'], function() {
-                    after();
-                    $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #fff;"></i>');
-                });break;
-            case 'sunburst':
-                before();
-                require(['codeSunburst'], function() {
-                    after();
-                    $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #fff;"></i>');
-                });break;
-            case 'obsidian':
-                before();
-                require(['codeObsidian'], function() {
-                    after();
-                    $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #fff;"></i>');
-                });break;
-            case 'doxy':
-                before();
-                require(['codeDoxy'], function() {
-                    after();
-                    $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #fff;"></i>');
-                });break;
-            default:
-                $('.cnblogs_code_copy a').html('<i class="iconfont icon-code5" style="color: #999;"></i>');
-                $('.cnblogs_code span').css('background-color', '#f9f9f9');
-                $('.cnblogs_code pre').css('background-color', '#f9f9f9');
-                break;
+        var pre       = $('pre'),
+            codeCopyA = $('.cnblogs_code_copy a'),
+            codeSpan  = $('.cnblogs_code span'),
+            codePre   = $('.post pre'),
+            hltype    = window.cnblogsConfig.essayCodeHighlightingType.toLowerCase(),
+            hltheme   = window.cnblogsConfig.essayCodeHighlighting.toLowerCase();
+
+        switch (hltype) {
+            case 'highlightjs': highlightjsCode(); break;
+            case 'prettify': prettifyCode(); break;
+            case 'cnblogs':
+            default: cnblogsCode(); break;
         }
-        function before() {
-            var pre = $('pre');
-            $.each(pre, function (i) {
-                var obj = $(pre[i]);
+        setScrollbarStyle();
+
+        // 使用博客园代码样式
+        function cnblogsCode() {
+            codeCopyA.html('<i class="iconfont icon-code5" style="color: #999;"></i>');
+            codeSpan.css('background-color', '#f6f8fa');
+            codePre.css({
+                'background-color': '#f6f8fa',
+                'overflow-x': 'auto'
+            });
+        }
+
+        // 使用 highlightjs 代码样式
+        function highlightjsCode() {
+            tools.dynamicLoadingCss('https://highlightjs.org/static/demo/styles/'+hltheme+'.css');
+            setCodeBefore();
+            require(['highlightjs'], function() {
+                $('pre').each(function(i, block) {
+                    codeCopyA.html('<i class="iconfont icon-code5 hljs-comment" style="font-style: inherit;"></i>');
+                    if ($.inArray(hltheme, [
+                            'github-gist', 'googlecode', 'grayscale',
+                            'idea', 'isbl-editor-light', 'qtcreator_light',
+                            'tomorrow', 'vs', 'xcode', 'arduino-light',
+                            'ascetic', 'color-brewer', 'lightfair'
+                        ]) != -1) pre.css('background-color', '#f6f8fa');
+                    hljs.highlightBlock(block);
+                });
+            });
+        }
+        // 使用 prettify 代码样式
+        function prettifyCode() {
+            pre.addClass('prettyprint');
+            switch (hltheme) {
+                case 'prettify':
+                    setCodeBefore();
+                    require(['codePrettify'], function() {
+                        $('pre').css('background-color', '#f6f8fa').css('border', '0'); setPrettifyCopy();
+                    });break;
+                case 'desert':
+                    setCodeBefore(); require(['codeDesert'], function() { setPrettifyCopy(); });break;
+                case 'sunburst':
+                    setCodeBefore(); require(['codeSunburst'], function() { setPrettifyCopy(); }); break;
+                case 'obsidian':
+                    setCodeBefore(); require(['codeObsidian'], function() { setPrettifyCopy(); }); break;
+                case 'doxy':
+                    setCodeBefore(); require(['codeDoxy'], function() { setPrettifyCopy(); }); break;
+                default: cnblogsCode(); break;
+            }
+        }
+
+        function setCodeBefore() {
+            $.each(codePre, function (i) {
+                var obj = $(codePre[i]);
                 obj.find('br').after('&#10;');
                 var codetext = obj.text();
-                obj.html('').text(codetext).addClass('prettyprint');
+                obj.html('').text(codetext).css('overflow-x', 'auto');
             });
         }
-        function after() {
-            $('.cnblogs_code_collapse').css('background', 'transparent');
-            $('.cnblogs_code').css({
-                'padding': '0',
-                'width': '96%',
-                'background': 'transparent',
-                'box-shadow': 'none',
-                'z-index': '10'
-            });
-            $('.cnblogs_code_toolbar').css({
-                'padding': '0',
-                'margin': '0'
-            });
-            $('.cnblogs_code pre').css({
-                'border-radius': '3px',
-                'padding': '10px',
-                'border': '0'
-            });
+
+        function setPrettifyCopy() {
+            codeCopyA.html('<i class="iconfont icon-code5 com" style="font-style: inherit;"></i>');
+        }
+
+        // 设置代码滚动条样式
+        function setScrollbarStyle() {
+            tools.dynamicLoadingCss(getJsDelivrUrl('jquery.mCustomScrollbar.css'));
+            var scrollbarTimeId = window.setInterval( function () {
+                if ($('.post pre span').length > 0) {
+                    $('.post pre').mCustomScrollbar({
+                        theme:"minimal-dark",
+                        axis:"yx"
+                    });
+                    switch (hltype) {
+                        case 'highlightjs':$('.mCSB_dragger_bar').css('background-color', $('.hljs-comment').css('color')); break;
+                        case 'prettify': $('.mCSB_dragger_bar').css('background-color', $('.com').css('color')); break;
+                        case 'cnblogs':
+                        default:  break;
+                    }
+                    bndongJs.clearIntervalTimeId(scrollbarTimeId);
+                }
+            }, 500 );
         }
     };
 

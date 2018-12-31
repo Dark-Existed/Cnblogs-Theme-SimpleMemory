@@ -7,7 +7,7 @@ require.config({
         }
     },
     paths: {
-        //-- 滚动条
+        //-- 菜单滚动条
         optiscroll: setFileNameMin('jquery.optiscroll', 'js'),
         //-- 进度条
         ToProgress: setFileNameMin('ToProgress.min', 'js'),
@@ -28,12 +28,14 @@ require.config({
         marvin: setFileNameMin('marvin.nav2', 'js'),
         //-- 文章后缀
         articleStatement: setFileNameMin('articleStatement', 'js'),
-        //-- 代码高亮
+        //-- 代码高亮 - prettify
         codePrettify: setFileNameMin('run_prettify', 'js'),
         codeDesert: setFileNameMin('run_prettify', 'js'),
         codeSunburst: setFileNameMin('run_prettify', 'js'),
         codeObsidian: setFileNameMin('run_prettify', 'js'),
         codeDoxy: setFileNameMin('run_prettify', 'js'),
+        //-- 代码高亮 - highlightjs
+        highlightjs: setFileNameMin('highlight.min', 'js'),
         //-- 主页头图动画
         circleMagic: setFileNameMin('circleMagic', 'js'),
         //-- 非主页头图动画
