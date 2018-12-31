@@ -44,15 +44,10 @@ function myTools() {
                 });
                 break;
             case 'banner':
-<<<<<<< HEAD
-                console.log('\n' + ' %c Dark-Existed CNBlogs %c https://www.cnblogs.com/darkexisted/ ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
-                console.log('\n' + ' %c Dark-Existed GitHub %c https://github.com/Dark-Existed ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
-=======
                 $.each(list, function (i) {
                     var fl = list[i];
                     console.log('\n' + ' %c '+(fl[0])+' %c '+(fl[1])+' ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
                 });
->>>>>>> upstream/master
                 break;
 
             default:
